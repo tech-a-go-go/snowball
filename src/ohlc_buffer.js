@@ -28,7 +28,7 @@ class OhlcBuffer {
         if (!match) {
             throw new Error('WINDOW_SIZE format is invalid: ' + windowSize);
         }
-        const num = match[1];
+        const num = Number(match[1]);
         const unit = match[2];
         let timespan = 0; // sec
         if (unit === 'd') {
