@@ -94,4 +94,8 @@ class Ema {
         const lastAverage = arr[arr.length-2]
         return lastAverage + (2 / (emaSize + 1)) * (price - lastAverage)
     }
+
+    toArray() {
+        return this.averages
+    }
 }
