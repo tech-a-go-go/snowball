@@ -78,7 +78,7 @@ class Ema {
         for (let i = 0; i < arr.length; i++) {
             sum += arr[i].price;
         }
-        return parseInt(sum / arr.length * 1000, 10) / 1000
+        return sum / arr.length
     }
 
     /**
@@ -92,7 +92,7 @@ class Ema {
         // 前回の指数平準移動平均を利用するため最後から2個目の要素を使う
         // (最後の要素は今回計算したものを保存する要素となる)
         const lastAverage = arr[arr.length-2].price
-        return parseInt((lastAverage + (2 / (emaSize + 1)) * (price - lastAverage)) * 1000, 10) / 1000
+        return lastAverage + (2 / (emaSize + 1)) * (price - lastAverage)
     }
 
     toArray() {
