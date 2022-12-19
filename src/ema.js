@@ -44,45 +44,54 @@ class Ema {
                 lastValue.price = price
                 // 生データの個数がsizeに達していない場合は単純移動平均
                 if (this.values.length < this.size) {
-                    let sum = 0;
-                    for (let i = 0; i < this.values.length; i++) {
-                        sum += values[i].price;
-                    }
-                    this.averages[this.averages.length-1].price = sum / this.values.length
+                    this.averages[this.averages.length-1].price = this._getAverages(this.values)
                 } else {
                     // 指数平滑移動平均
-                    const lastAverage = this.averages[this.averages.length-2]
                     // https://www.moneypartners.co.jp/support/tech/ema.html
-                    const newAverage = lastAverage + (2 / (this.size + 1)) * (lastValue.price - lastAverage)
-                    this.averages[this.averages.length-1].price = newAverage
+                    this.averages[this.averages.length-1].price = _getExpoAverages(this.averages, price, this.size)
                 }
             } else {
                 // 新規時刻の価格データの追加処理
                 this.values.push({"price": price, "ts": normalizedTs})
                 if (this.values.length < this.size) {
                     // 生データの個数がsizeに達していない場合は単純移動平均
-                    let sum = 0;
-                    for (let i = 0; i < this.values.length; i++) {
-                        sum += values[i].price;
-                    }
-                    this.averages.push({"price":sum / this.values.length, "ts": normalizedTs})
+                    this.averages.push({"price": this._getAverages(this.values), "ts": normalizedTs})
                 } else {
                     // 指数平滑移動平均
-                    const lastAverage = this.averages[this.averages.length-1]
-                    // https://www.moneypartners.co.jp/support/tech/ema.html
-                    const newAverage = lastAverage + (2 / (this.size + 1)) * (lastValue.price - lastAverage)
-                    this.averages.push({"price": newAverage, "ts": normalizedTs}) 
+                    // _getExpoAveragesで前回の指数平準移動平均として最後から2個目の要素を利用するため一旦価格なしの要素を追加してから指数平準移動平均を計算して追加している
+                    this.averages.push({"ts": normalizedTs})
+                    // ダミーとして入れたpriceデータを更新
+                    this.averages[this.averages.length-1].price = _getExpoAverages(this.averages, price, this.size)
                 }
             }
         }
         this.lastNormalizedTs = normalizedTs
     }
 
+    /**
+     * 指定された配列の単純移動平均を返す
+     * @param {*} arr 計算する配列
+     * @returns 平均値
+     */
     _getAverages(arr) {
         let sum = 0;
         for (let i = 0; i < arr.length; i++) {
             sum += values[i].price;
         }
         return sum / arr.length
+    }
+
+    /**
+     * 指定された配列の指数平準移動平均を返す
+     * @param {*} arr 計算する配列
+     * @param {*} price 今回の価格
+     * @param {*} emaSize 指数平準移動平均のサイズ
+     * @returns 今回の指数平準移動平均
+     */
+    _getExpoAverages(arr, price, emaSize) {
+        // 前回の指数平準移動平均を利用するため最後から2個目の要素を使う
+        // (最後の要素は今回計算したものを保存する要素となる)
+        const lastAverage = arr[arr.length-2]
+        return lastAverage + (2 / (emaSize + 1)) * (price - lastAverage)
     }
 }

@@ -56,6 +56,7 @@ class OhlcBuffer {
 
     /**
      * 指定された時刻を正規化して返す.
+     * 正規化された時刻 = ローソク足の最初の時刻
      */
     getNormalize(timestamp) {
         return this.getIndex(timestamp) * this.windowTimespan;
@@ -81,7 +82,7 @@ class OhlcBuffer {
         } else {
             this.list.push({
                 ts: normalizedTs, // window 開始時刻
-                ets: normalizedTs + this.windowTimespan, // window 終了時刻
+                // ets: normalizedTs + this.windowTimespan, // window 終了時刻
                 open: price,
                 high: price,
                 low: price,
