@@ -91,7 +91,7 @@ class Ema {
     _getExpoAverages(arr, price, emaSize) {
         // 前回の指数平準移動平均を利用するため最後から2個目の要素を使う
         // (最後の要素は今回計算したものを保存する要素となる)
-        const lastAverage = arr[arr.length-2]
+        const lastAverage = arr[arr.length-2].price
         return lastAverage + (2 / (emaSize + 1)) * (price - lastAverage)
     }
 
