@@ -48,7 +48,7 @@ class Ema {
                 } else {
                     // 指数平滑移動平均
                     // https://www.moneypartners.co.jp/support/tech/ema.html
-                    this.averages[this.averages.length-1].price = _getExpoAverages(this.averages, price, this.size)
+                    this.averages[this.averages.length-1].price = this._getExpoAverages(this.averages, price, this.size)
                 }
             } else {
                 // 新規時刻の価格データの追加処理
@@ -61,7 +61,7 @@ class Ema {
                     // _getExpoAveragesで前回の指数平準移動平均として最後から2個目の要素を利用するため一旦価格なしの要素を追加してから指数平準移動平均を計算して追加している
                     this.averages.push({"ts": normalizedTs})
                     // ダミーとして入れたpriceデータを更新
-                    this.averages[this.averages.length-1].price = _getExpoAverages(this.averages, price, this.size)
+                    this.averages[this.averages.length-1].price = this._getExpoAverages(this.averages, price, this.size)
                 }
             }
         }
