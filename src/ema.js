@@ -76,7 +76,7 @@ class Ema {
     _getAverages(arr) {
         let sum = 0;
         for (let i = 0; i < arr.length; i++) {
-            sum += values[i].price;
+            sum += arr[i].price;
         }
         return sum / arr.length
     }
