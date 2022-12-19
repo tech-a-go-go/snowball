@@ -70,6 +70,7 @@ class OhlcsBuffer {
      * 
      * @price int 価格
      * @timestamp int タイムスタンプ(unixtime)
+     * @return object priceとnormalizedTsの連想配列
      */
     addPrice(price, spread, timestamp) {
         // 基準時間に変換(TimeWindowの最初の時間)
@@ -96,6 +97,7 @@ class OhlcsBuffer {
                 spread: spread,
             })
         }
+        return {price, normalizedTs}
     }
 
     toArray() {
