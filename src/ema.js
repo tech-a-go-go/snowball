@@ -105,9 +105,9 @@ class Ema {
      */
     toDict() {
         return this.averages.reduce(
-            (obj,data) => {
-                obj[data.ts] = data.price
-                return obj
+            (dict,data) => {
+                dict[data.ts] = data.price
+                return dict
             }, {}
         )
     }
