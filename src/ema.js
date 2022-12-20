@@ -98,4 +98,17 @@ class Ema {
     toArray() {
         return this.averages
     }
+
+    /**
+     * Key=時刻、Value=移動平均価格のdictを返す
+     * @returns dict
+     */
+    toDict() {
+        return this.averages.reduce(
+            (obj,data) => {
+                obj[data.ts] = data.price
+                return obj
+            }, {}
+        )
+    }
 }
