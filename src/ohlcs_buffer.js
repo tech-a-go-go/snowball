@@ -17,6 +17,7 @@ class OhlcsBuffer {
      */
     constructor(windowSize) {
         this.setWindowSize(windowSize);
+        // ohlcsデータのリスト
         this.list = [];
     }
 

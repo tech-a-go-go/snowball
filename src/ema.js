@@ -111,4 +111,10 @@ class Ema {
             }, {}
         )
     }
+
+    clear() {
+        this.values = [];
+        this.averages = [];
+        this.lastNormalizedTs = 0
+    }
 }
