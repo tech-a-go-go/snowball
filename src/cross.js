@@ -5,6 +5,17 @@ const Cross = {
     DEAD : 2,
   };
 
+function cross2str(cross) {
+    if (cross == Cross.NONE) {
+        return "NONE"
+    } else if (cross == Cross.GOLDEN) {
+        return "GOLDEN"
+    } else if (cross == Cross.DEAD) {
+        return "DEAD"
+    }
+    throw "Unknown Cross : " + cross
+}
+
 /**
  * 指定された2つのEMA配列からクロスを判定してい返す
  * @param {array[Ema]} shortMaList 短期移動平均線
