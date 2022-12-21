@@ -17,7 +17,7 @@ function cross2str(cross) {
 }
 
 /**
- * 指定された2つのEMA配列からクロスを判定してい返す
+ * 指定された2つのEMA配列からクロスを判定して返す
  * @param {array[Ema]} shortMaList 短期移動平均線
  * @param {array[Ema]} longMaList 長期移動平均線
  * @returns Cross
