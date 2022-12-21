@@ -71,13 +71,16 @@ class OhlcsBuffer {
      * 
      * @price int 価格
      * @timestamp int タイムスタンプ(unixtime)
-     * @return object priceとnormalizedTsの連想配列
+     * @return object price, normalizedTs, newPeriod(新しい足フラグ) の連想配列
      */
     addPrice(price, spread, timestamp) {
         // 基準時間に変換(TimeWindowの最初の時間)
         const normalizedTs = this.getNormalize(timestamp);
+        // 新しい足かフラグ
+        let newPeriod = true
         let lastOhlc = this.getLast()
         if (lastOhlc && lastOhlc.ts == normalizedTs) {
+            newPeriod = false
             lastOhlc.close = price;
             if (lastOhlc.high < price) {
                 lastOhlc.high = price;
@@ -98,7 +101,7 @@ class OhlcsBuffer {
                 spread: spread,
             })
         }
-        return {price, normalizedTs}
+        return {price, normalizedTs, newPeriod}
     }
 
     toArray() {
