@@ -1,0 +1,24 @@
+
+const Cross = {
+    NONE : 0,
+    GOLDEN : 1,
+    DEAD : 2,
+  };
+
+/**
+ * 指定された2つのEMA配列からクロスを判定してい返す
+ * @param {array[Ema]} shortMaList 短期移動平均線
+ * @param {array[Ema]} longMaList 長期移動平均線
+ * @returns Cross
+ */
+function checkCross(shortMaList, longMaList) {
+    const shortLen = shortMaList.length
+    const longLen = longMaList.length
+    // 最後の要素は確定足ではないため最後から3つ目と2つ目の要素で判定する
+    if (shortMaList[shortLen-3].price < longMaList[longLen-3].price && shortMaList[shortLen-2].price > longMaList[longLen-2].price) {
+        return Cross.GOLDEN
+    } else if (shortMaList[shortLen-3].price > longMaList[longLen-3].price && shortMaList[shortLen-2].price < longMaList[longLen-2].price) {
+        return Cross.DEAD
+    }
+    return Cross.NONE
+}
