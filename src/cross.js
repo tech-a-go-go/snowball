@@ -14,6 +14,9 @@ const Cross = {
 function checkCross(shortMaList, longMaList) {
     const shortLen = shortMaList.length
     const longLen = longMaList.length
+    if (shortLen < 3 || longLen < 3) {
+        return Cross.NONE
+    }
     // 最後の要素は確定足ではないため最後から3つ目と2つ目の要素で判定する
     if (shortMaList[shortLen-3].price < longMaList[longLen-3].price && shortMaList[shortLen-2].price > longMaList[longLen-2].price) {
         return Cross.GOLDEN
