@@ -99,6 +99,10 @@ class Ema {
         return this.averages
     }
 
+    getLastAverage() {
+        return this.averages[this.averages.length-1]
+    }
+
     /**
      * Key=時刻、Value=移動平均価格のdictを返す
      * @returns dict
