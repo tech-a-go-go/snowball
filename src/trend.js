@@ -64,4 +64,5 @@ function getTrendPattern(ma1, ma2, ma3, ma4) {
     else if (ma2 > ma4 && ma4 > ma3 && ma3 > ma1) { return 30 }
     else if (ma4 > ma2 && ma2 > ma1 && ma1 > ma3) { return 31 }
     else if (ma4 > ma2 && ma2 > ma3 && ma3 > ma1) { return 32 }
+    return 0
 }
