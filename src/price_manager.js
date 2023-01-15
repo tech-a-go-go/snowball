@@ -18,11 +18,11 @@ class PriceManager {
     }
 
     static getInstance() {
-        if (!PriceManager.instance) {
-            PriceManager.instance = new PriceManager()
-            PriceManager.instance.subscribeStreaming()
+        if (!window.priceManager) {
+            window.priceManager = new PriceManager()
+            window.priceManager.subscribeStreaming()
         }
-        return PriceManager.instance
+        return window.priceManager
     }
 
     subscribeStreaming() {
