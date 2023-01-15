@@ -52,12 +52,12 @@ class PriceManager {
     }
 
     store(unixtime, price) {
-        const s1Result = this.s1OhlcsBuf.addPrice(price, spread, unixtime)
+        const s1Result = this.s1OhlcBuf.addPrice(price, unixtime)
         this.s1Ema9.add(price, s1Result.normalizedTs)
         this.s1Ema25.add(price, s1Result.normalizedTs)
         this.s1Ema125.add(price, s1Result.normalizedTs)
 
-        const m1Result = this.m1OhlcsBuf.addPrice(price, spread, unixtime)
+        const m1Result = this.m1OhlcBuf.addPrice(price, unixtime)
         this.m1Ema9.add(price, m1Result.normalizedTs)
         this.m1Ema25.add(price, m1Result.normalizedTs)
 
