@@ -10,10 +10,11 @@ class OhlcBuffer {
     /**
      * @constructor
      *
-     * @param windowSize string   OHLCVの間隔 (1m, 10h,...)
+     * @param windowSize string   OHLCの間隔 (1m, 10h,...)
      */
     constructor(windowSize) {
         this.setWindowSize(windowSize);
+        // ohlcデータのリスト
         this.list = [];
     }
 
@@ -67,12 +68,16 @@ class OhlcBuffer {
      * 
      * @price int 価格
      * @timestamp int タイムスタンプ(unixtime)
+     * @return object price, normalizedTs, newPeriod(新しい足フラグ) の連想配列
      */
     addPrice(price, timestamp) {
         // 基準時間に変換(TimeWindowの最初の時間)
         const normalizedTs = this.getNormalize(timestamp);
+        // 新しい足かフラグ
+        let newPeriod = true
         let lastOhlc = this.getLast()
         if (lastOhlc && lastOhlc.ts == normalizedTs) {
+            newPeriod = false
             lastOhlc.close = price;
             if (lastOhlc.high < price) {
                 lastOhlc.high = price;
@@ -89,6 +94,7 @@ class OhlcBuffer {
                 close: price,
             })
         }
+        return {price, normalizedTs, newPeriod}
     }
 
     toArray() {
