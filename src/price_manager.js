@@ -5,6 +5,7 @@ class PriceManager {
     static instance;
 
     constructor() {
+        console.log('PriceManager constructor')
         if(PriceManager.instance){
             return PriceManager.instance;
         }
@@ -23,6 +24,7 @@ class PriceManager {
     }
 
     subscribeStreaming() {
+        console.log('PriceManager subscribeStreaming')
         let messageBroker = window.raise.MessageBrokerHolder.get()
         messageBroker.subscribe("price.USD/JPY", 'PRICE', this.onPriceReceive);
     }
