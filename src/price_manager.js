@@ -2,10 +2,8 @@
 
 class PriceManager {
 
-    static instance;
-
     constructor() {
-        console.log('PriceManager constructor')
+        console.log('PriceManager initializing...')
 
         this.s1OhlcBuf = new OhlcBuffer("1s")
         this.s1Ema9 = new Ema(9)
@@ -23,12 +21,6 @@ class PriceManager {
             window.priceManager.subscribeStreaming()
         }
         return window.priceManager
-    }
-
-    subscribeStreaming() {
-        console.log('PriceManager subscribeStreaming')
-        let messageBroker = window.raise.MessageBrokerHolder.get()
-        messageBroker.subscribe("price.USD/JPY", 'PRICE', this.onPriceReceive);
     }
 
     onPriceReceive(priceData) {
@@ -77,5 +69,10 @@ class PriceManager {
         data.forEach((d) => {
             this.store(d.ts, d.price)
         })
+    }
+
+    subscribeStreaming() {
+        let messageBroker = window.raise.MessageBrokerHolder.get()
+        messageBroker.subscribe("price.USD/JPY", 'PRICE', this.onPriceReceive);
     }
 }
