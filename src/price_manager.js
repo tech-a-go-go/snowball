@@ -2,8 +2,6 @@
 
 class PriceManager {
 
-    static instance;
-
     constructor() {
         console.log('PriceManager constructor')
 
