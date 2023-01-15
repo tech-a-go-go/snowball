@@ -1,6 +1,6 @@
 'use strict';
 
-class PriceManager {
+class PriceManager extends EventTarget {
 
     constructor() {
         console.log('PriceManager initializing...')
