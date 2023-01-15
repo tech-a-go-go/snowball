@@ -6,9 +6,6 @@ class PriceManager {
 
     constructor() {
         console.log('PriceManager constructor')
-        if(PriceManager.instance){
-            return PriceManager.instance;
-        }
 
         this.s1OhlcBuf = new OhlcBuffer("1s")
         this.s1Ema9 = new Ema(9)
@@ -18,9 +15,14 @@ class PriceManager {
         this.m1OhlcBuf = new OhlcBuffer("1m")
         this.m1Ema9 = new Ema(9)
         this.m1Ema25 = new Ema(25)
+    }
 
-        this.subscribeStreaming()
-        PriceManager.instance = this
+    static getInstance() {
+        if (!this.instance) {
+            this.instance = new PriceManager()
+            this.instance.subscribeStreaming()
+        }
+        return this.instance
     }
 
     subscribeStreaming() {
