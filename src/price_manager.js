@@ -3,6 +3,8 @@
 class PriceManager extends EventTarget {
 
     constructor() {
+        super()
+        
         console.log('PriceManager initializing...')
 
         this.s1OhlcBuf = new OhlcBuffer("1s")
