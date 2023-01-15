@@ -2,6 +2,8 @@
 
 class PriceManager {
 
+    static instance;
+
     constructor() {
         console.log('PriceManager constructor')
 
@@ -16,11 +18,11 @@ class PriceManager {
     }
 
     static getInstance() {
-        if (!this.instance) {
-            this.instance = new PriceManager()
-            this.instance.subscribeStreaming()
+        if (!PriceManager.instance) {
+            PriceManager.instance = new PriceManager()
+            PriceManager.instance.subscribeStreaming()
         }
-        return this.instance
+        return PriceManager.instance
     }
 
     subscribeStreaming() {
