@@ -5,8 +5,8 @@ class PriceManager {
     static instance;
 
     constructor() {
-        if(instance){
-            return instance;
+        if(PriceManager.instance){
+            return PriceManager.instance;
         }
 
         this.s1OhlcBuf = new OhlcBuffer("1s")
