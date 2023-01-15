@@ -19,7 +19,7 @@ class PriceManager {
         this.m1Ema25 = new Ema(25)
 
         this.subscribeStreaming()
-        this.instance = this
+        PriceManager.instance = this
     }
 
     subscribeStreaming() {
