@@ -26,7 +26,7 @@ class PriceManager extends EventTarget {
     }
 
     size() {
-        return this.this.s1OhlcBuf.size()
+        return this.s1OhlcBuf.size()
     }
 
     onPriceReceive(priceData) {
