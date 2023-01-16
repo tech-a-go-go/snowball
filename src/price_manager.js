@@ -25,6 +25,10 @@ class PriceManager extends EventTarget {
         return window.priceManager
     }
 
+    size() {
+        return this.this.s1OhlcBuf.size()
+    }
+
     onPriceReceive(priceData) {
         let buyPrice = parseInt(priceData[3][0] * 1000, 10)
         let sellPrice = parseInt(priceData[2][0] * 1000, 10)
