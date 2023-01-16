@@ -4,7 +4,7 @@ class PriceManager extends EventTarget {
 
     constructor() {
         super()
-        
+
         console.log('PriceManager initializing...')
 
         this.s1OhlcBuf = new OhlcBuffer("1s")
@@ -75,6 +75,6 @@ class PriceManager extends EventTarget {
 
     subscribeStreaming() {
         let messageBroker = window.raise.MessageBrokerHolder.get()
-        messageBroker.subscribe("price.USD/JPY", 'PRICE', this.onPriceReceive);
+        messageBroker.subscribe("price.USD/JPY", 'PRICE', this.onPriceReceive, this);
     }
 }
