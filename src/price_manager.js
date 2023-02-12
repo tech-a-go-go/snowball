@@ -16,6 +16,7 @@ class PriceManager extends EventTarget {
         this.m1OhlcBuf = new OhlcBuffer("1m")
         this.m1Ema9 = new Ema(9)
         this.m1Ema25 = new Ema(25)
+        this.m1Ema75 = new Ema(75)
     }
 
     static getInstance() {
@@ -57,6 +58,7 @@ class PriceManager extends EventTarget {
         this.m1OhlcBuf.clear()
         this.m1Ema9.clear()
         this.m1Ema25.clear()
+        this.m1Ema75.clear()
     }
 
     store(unixtime, price) {
@@ -69,6 +71,7 @@ class PriceManager extends EventTarget {
         const m1Result = this.m1OhlcBuf.addPrice(price, unixtime)
         this.m1Ema9.add(price, m1Result.normalizedTs)
         this.m1Ema25.add(price, m1Result.normalizedTs)
+        this.m1Ema75.add(price, m1Result.normalizedTs)
 
         return {"s1NewPeriod": s1Result.newPeriod, "m1NewPeriod": m1Result.newPeriod}
     }
