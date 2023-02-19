@@ -121,4 +121,21 @@ class Ema {
         this.averages = [];
         this.lastNormalizedTs = 0
     }
+
+    findRev(func) {
+        const averages = this.averages;
+        for (let i = averages.length - 1; i >= 0; i--) {
+            let averageDict = averages[i];
+            if (func(averageDict)) {
+                return averageDict;
+            }
+        }
+        return null;
+    }
+
+    findByTimestamp(timestamp) {
+        return this.findRev((averageDict) => {
+            return averageDict.ts === timestamp
+        })
+    }
 }
