@@ -1,5 +1,5 @@
 
-export default class TimeRange {
+class TimeRange {
 
     constructor(start, end) {
         this.start = start

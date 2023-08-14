@@ -8,7 +8,7 @@ const NO_TREND_STATE = 0
 const TREND_UP_STATE = 1
 const TREND_DOWN_STATE = 2
 
-export default class TrendManager {
+class TrendManager {
 
     constructor() {
         this.currentState = NO_TREND_STATE
