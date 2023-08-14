@@ -95,11 +95,15 @@ class Ema {
         return lastAverage + (2 / (emaSize + 1)) * (price - lastAverage)
     }
 
+    count() {
+        return this.averages.length
+    }
+
     toArray() {
         return this.averages
     }
 
-    getLastAverage() {
+    getLast() {
         return this.averages[this.averages.length-1]
     }
 
