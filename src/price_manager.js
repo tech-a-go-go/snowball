@@ -12,12 +12,19 @@ class PriceManager extends EventTarget {
         this.s1Ema32 = new Ema(32)
         // this.s1Ema75 = new Ema(75)
         this.s1Ema125 = new Ema(125)
+        this.s1Ema150 = new Ema(150)
     
         this.m1OhlcBuf = new OhlcBuffer("1m")
         this.m1Ema9 = new Ema(9)
         this.m1Ema25 = new Ema(25)
         this.m1Ema75 = new Ema(75)
         this.m1Ema250 = new Ema(250)
+
+        this.m5OhlcBuf = new OhlcBuffer("5m")
+        this.m5Ema9 = new Ema(9)
+
+        this.trendManager1 = new TrendManager()
+        this.trendManager2 = new TrendManager()
     }
 
     static getInstance() {
@@ -56,11 +63,17 @@ class PriceManager extends EventTarget {
         this.s1Ema32.clear()
         // this.s1Ema75.clear()
         this.s1Ema125.clear()
+        this.s1Ema150.clear()
         this.m1OhlcBuf.clear()
         this.m1Ema9.clear()
         this.m1Ema25.clear()
         this.m1Ema75.clear()
         this.m1Ema250.clear()
+        this.m5OhlcBuf.clear()
+        this.m5Ema9.clear()
+
+        this.trendManager1.clear()
+        this.trendManager2.clear()
     }
 
     store(unixtime, price) {
@@ -69,6 +82,7 @@ class PriceManager extends EventTarget {
         this.s1Ema32.add(price, s1Result.normalizedTs)
         // this.s1Ema75.add(price, s1Result.normalizedTs)
         this.s1Ema125.add(price, s1Result.normalizedTs)
+        this.s1Ema150.add(price, s1Result.normalizedTs)
 
         const m1Result = this.m1OhlcBuf.addPrice(price, unixtime)
         this.m1Ema9.add(price, m1Result.normalizedTs)
@@ -76,7 +90,28 @@ class PriceManager extends EventTarget {
         this.m1Ema75.add(price, m1Result.normalizedTs)
         this.m1Ema250.add(price, m1Result.normalizedTs)
 
-        return {"s1NewPeriod": s1Result.newPeriod, "m1NewPeriod": m1Result.newPeriod}
+        const m5Result = this.m5OhlcBuf.addPrice(price, unixtime)
+        this.m5Ema9.add(price, m5Result.normalizedTs)
+
+        if (s1Result.newPeriod) {
+            if (this.s1Ema9.count() > 0 && this.m1Ema9.count() > 0) {
+                let d = this.s1Ema9.getLast()
+                this.trendManager1.addPrices(d.ts * 1000, 
+                [
+                    d.price,
+                    this.s1Ema125.getLast().price, 
+                    this.s1Ema150.getLast().price,
+                    this.m1Ema75.getLast().price,
+                ])
+                this.trendManager2.addPrices(d.ts * 1000,
+                [
+                    this.m1Ema9.getLast().price,
+                    this.m1Ema25.getLast().price,
+                ])
+            } 
+        }
+
+        return {"s1NewPeriod": s1Result.newPeriod, "m1NewPeriod": m1Result.newPeriod, "m5NewPeriod": m5Result.newPeriod}
     }
 
     bulkStore(data) {
