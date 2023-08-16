@@ -44,9 +44,11 @@ class PriceManager extends EventTarget {
         let sellPrice = parseInt(priceData[2][0] * 1000, 10)
         let price = (buyPrice + sellPrice) / 2 / 1000
         let date = new Date(priceData[1]);
-        let unixtime = Math.floor(date.getTime() / 1000);
-        let result = this.store(unixtime, price)
+        let timestamp = Math.floor(date.getTime() / 1000);
+        let result = this.store(timestamp, price)
 
+        this.dispatchEvent(new CustomEvent('priceData', { detail: {timestamp, price} }))
+        
         if (result.s1NewPeriod) {
             if (result.m1NewPeriod) {
                 // s1 is also in the new period
