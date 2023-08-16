@@ -2,7 +2,6 @@
 
 class PeakValleyDetector {
     constructor(windowSize, emaSize) {
-        super()
         this.windowBuffer = new WindowBuffer(windowSize)
         this.ema = new Ema(emaSize)
 
