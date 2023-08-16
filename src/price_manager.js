@@ -27,6 +27,8 @@ class PriceManager extends EventTarget {
 
         this.trendManager1 = new TrendManager()
         this.trendManager2 = new TrendManager()
+
+        this.trends = []
     }
 
     static getInstance() {
@@ -82,7 +84,7 @@ class PriceManager extends EventTarget {
 
     store(unixtime, price) {
         this.rawData.push({timestamp: unixtime, price: price})
-        
+
         const s1Result = this.s1OhlcBuf.addPrice(price, unixtime)
         this.s1Ema9.add(price, s1Result.normalizedTs)
         this.s1Ema32.add(price, s1Result.normalizedTs)
@@ -114,6 +116,17 @@ class PriceManager extends EventTarget {
                     this.m1Ema9.getLast().price,
                     this.m1Ema25.getLast().price,
                 ])
+
+                let trendA = this.trendManager1.getState();
+                let trendB = this.trendManager2.getState();
+
+                let trend = NO_TREND_STATE;
+                if (trendA === TREND_UP_STATE && trendB === TREND_UP_STATE) {
+                    trend = TREND_UP_STATE;
+                } else if (trendA === TREND_DOWN_STATE && trendB === TREND_DOWN_STATE) {
+                    trend = TREND_DOWN_STATE;
+                }
+                this.trends.push({timestamp:unixtime, price, trend})
             } 
         }
 
