@@ -7,6 +7,8 @@ class PriceManager extends EventTarget {
 
         console.log('PriceManager initializing...')
 
+        this.rawData = []
+
         this.s1OhlcBuf = new OhlcBuffer("1s")
         this.s1Ema9 = new Ema(9)
         this.s1Ema32 = new Ema(32)
@@ -79,6 +81,8 @@ class PriceManager extends EventTarget {
     }
 
     store(unixtime, price) {
+        this.rawData.push({timestamp: unixtime, price: price})
+        
         const s1Result = this.s1OhlcBuf.addPrice(price, unixtime)
         this.s1Ema9.add(price, s1Result.normalizedTs)
         this.s1Ema32.add(price, s1Result.normalizedTs)
