@@ -11,15 +11,16 @@ class PriceManager extends EventTarget {
 
         this.s1OhlcBuf = new OhlcBuffer("1s")
         this.s1Ema9 = new Ema(9)
-        this.s1Ema32 = new Ema(32)
+        // this.s1Ema32 = new Ema(32)
         // this.s1Ema75 = new Ema(75)
         this.s1Ema125 = new Ema(125)
         this.s1Ema150 = new Ema(150)
     
         this.m1OhlcBuf = new OhlcBuffer("1m")
         this.m1Ema9 = new Ema(9)
-        this.m1Ema25 = new Ema(25)
-        this.m1Ema75 = new Ema(75)
+        // this.m1Ema25 = new Ema(25)
+        this.m1Ema45 = new Ema(45) // m5Ema9とほぼ同じ
+        // this.m1Ema75 = new Ema(75)
         this.m1Ema250 = new Ema(250)
 
         this.m5OhlcBuf = new OhlcBuffer("5m")
@@ -66,14 +67,15 @@ class PriceManager extends EventTarget {
     clear() {
         this.s1OhlcBuf.clear()
         this.s1Ema9.clear()
-        this.s1Ema32.clear()
+        // this.s1Ema32.clear()
         // this.s1Ema75.clear()
         this.s1Ema125.clear()
         this.s1Ema150.clear()
         this.m1OhlcBuf.clear()
         this.m1Ema9.clear()
-        this.m1Ema25.clear()
-        this.m1Ema75.clear()
+        // this.m1Ema25.clear()
+        this.m1Ema45.clear()
+        // this.m1Ema75.clear()
         this.m1Ema250.clear()
         this.m5OhlcBuf.clear()
         this.m5Ema9.clear()
@@ -87,15 +89,16 @@ class PriceManager extends EventTarget {
 
         const s1Result = this.s1OhlcBuf.addPrice(price, unixtime)
         this.s1Ema9.add(price, s1Result.normalizedTs)
-        this.s1Ema32.add(price, s1Result.normalizedTs)
+        // this.s1Ema32.add(price, s1Result.normalizedTs)
         // this.s1Ema75.add(price, s1Result.normalizedTs)
         this.s1Ema125.add(price, s1Result.normalizedTs)
         this.s1Ema150.add(price, s1Result.normalizedTs)
 
         const m1Result = this.m1OhlcBuf.addPrice(price, unixtime)
         this.m1Ema9.add(price, m1Result.normalizedTs)
-        this.m1Ema25.add(price, m1Result.normalizedTs)
-        this.m1Ema75.add(price, m1Result.normalizedTs)
+        // this.m1Ema25.add(price, m1Result.normalizedTs)
+        this.m1Ema45.add(price, m1Result.normalizedTs)
+        // this.m1Ema75.add(price, m1Result.normalizedTs)
         this.m1Ema250.add(price, m1Result.normalizedTs)
 
         const m5Result = this.m5OhlcBuf.addPrice(price, unixtime)
@@ -109,12 +112,15 @@ class PriceManager extends EventTarget {
                     d.price,
                     this.s1Ema125.getLast().price, 
                     this.s1Ema150.getLast().price,
-                    this.m1Ema75.getLast().price,
+                    this.m1Ema9.getLast().price,
+                    this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
+                    this.m1Ema250.getLast().price,
                 ])
                 this.trendManager2.addPrices(d.ts * 1000,
                 [
                     this.m1Ema9.getLast().price,
-                    this.m1Ema25.getLast().price,
+                    this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
+                    this.m1Ema250.getLast().price,
                 ])
 
                 let trendA = this.trendManager1.getState();
