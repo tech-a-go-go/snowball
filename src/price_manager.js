@@ -112,7 +112,7 @@ class PriceManager extends EventTarget {
                     d.price,
                     this.s1Ema125.getLast().price, 
                     this.s1Ema150.getLast().price,
-                    this.m1Ema9.getLast().price,
+                    // this.m1Ema9.getLast().price,
                     this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
                     this.m1Ema250.getLast().price,
                 ])
