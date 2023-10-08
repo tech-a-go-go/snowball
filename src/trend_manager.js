@@ -90,6 +90,48 @@ class TrendManager {
         }
     }
 
+    addPrices2(time, order) {
+        if (order === ASCENDING_ORDER) {
+            if (this.currentState !== TREND_DOWN_STATE) {
+                // 下降トレンド開始
+                if(this.currentState === TREND_UP_STATE){
+                    // 上昇トレンドが終了し下降トレンド開始なので上昇トレンドのTimeRangeを追加
+                    this.trendUpTimeRanges.push(new TimeRange([this.beginTime, time]))
+                }
+                this.currentState = TREND_DOWN_STATE
+                this.beginTime = time
+            }
+        } else if (order === DESCENDING_ORDER) {
+            if (this.currentState !== TREND_UP_STATE) {
+                // 上昇トレンド開始
+                if(this.currentState === TREND_DOWN_STATE){
+                    // 下降トレンドが終了し上昇トレンドが開始なので下降トレンドのTimeRangeを追加
+                    this.trendDownTimeRanges.push(new TimeRange([this.beginTime, time]))
+                }
+                this.currentState = TREND_UP_STATE
+                this.beginTime = time
+            }
+        } else {
+            if (this.currentState === TREND_UP_STATE) {
+                // 上昇トレンド終了
+                this.currentState = NO_TREND_STATE
+                this.trendUpTimeRanges.push(new TimeRange([this.beginTime, time]))
+                // console.log("finish TREND_UP_STATE")
+                // console.log("prices", prices)
+
+                this.beginTime = null
+            } else if (this.currentState === TREND_DOWN_STATE) {
+                // 下降トレンド終了
+                this.currentState = NO_TREND_STATE
+                this.trendDownTimeRanges.push(new TimeRange([this.beginTime, time]))
+                // console.log("finish TREND_DOWN_STATE")
+                // console.log("prices", prices)
+
+                this.beginTime = null
+            }
+        }
+    }
+
     checkPricesOrder(prices) {
         if (prices.length < 2) return UNORDERED;
         if (prices.every((val, i, prices) => !i || (prices[i] >= prices[i - 1]))) {
