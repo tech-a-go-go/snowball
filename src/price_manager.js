@@ -120,11 +120,17 @@ class PriceManager extends EventTarget {
                 let order = UNORDERED
                 if (this.m1Ema9.getLast().price > this.m1Ema25.getLast().price
                     && this.m1Ema9.getLast().price > this.m1Ema45.getLast().price
-                    && this.m1Ema9.getLast().price > this.h1Ema9.getLast().price) {
+                    && this.m1Ema9.getLast().price > this.h1Ema9.getLast().price
+                    && this.m1Ema45.getLast().price > this.m1Ema75.getLast().price
+                    && this.m1Ema75.getLast().price > this.h1Ema9.getLast().price
+                    ) {
                     order = DESCENDING_ORDER
                 } else if (this.m1Ema9.getLast().price < this.m1Ema25.getLast().price
-                && this.m1Ema9.getLast().price < this.m1Ema45.getLast().price
-                && this.m1Ema9.getLast().price < this.h1Ema9.getLast().price) {
+                    && this.m1Ema9.getLast().price < this.m1Ema45.getLast().price
+                    && this.m1Ema9.getLast().price < this.h1Ema9.getLast().price
+                    && this.m1Ema45.getLast().price < this.m1Ema75.getLast().price
+                    && this.m1Ema75.getLast().price < this.h1Ema9.getLast().price
+                    ) {
                     order = ASCENDING_ORDER
                 }
                 this.trendManager2.addPrices2(d.ts * 1000, order)
