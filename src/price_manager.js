@@ -118,18 +118,16 @@ class PriceManager extends EventTarget {
                     this.h1Ema9.getLast().price,
                 ])
                 let order = UNORDERED
-                if (this.m1Ema9.getLast().price > this.m1Ema25.getLast().price
-                    && this.m1Ema9.getLast().price > this.m1Ema45.getLast().price
-                    && this.m1Ema9.getLast().price > this.h1Ema9.getLast().price
+                if (this.s1Ema125.getLast().price > this.s1Ema150.getLast().price
+                    && this.m1Ema9.getLast().price > this.m1Ema25.getLast().price
                     && this.m1Ema45.getLast().price > this.m1Ema75.getLast().price
-                    && this.m1Ema75.getLast().price > this.h1Ema9.getLast().price
+                    && this.m1Ema9.getLast().price > this.h1Ema9.getLast().price
                     ) {
                     order = DESCENDING_ORDER
-                } else if (this.m1Ema9.getLast().price < this.m1Ema25.getLast().price
-                    && this.m1Ema9.getLast().price < this.m1Ema45.getLast().price
-                    && this.m1Ema9.getLast().price < this.h1Ema9.getLast().price
+                } else if (this.s1Ema125.getLast().price < this.s1Ema150.getLast().price
+                    && this.m1Ema9.getLast().price < this.m1Ema25.getLast().price
                     && this.m1Ema45.getLast().price < this.m1Ema75.getLast().price
-                    && this.m1Ema75.getLast().price < this.h1Ema9.getLast().price
+                    && this.m1Ema9.getLast().price < this.h1Ema9.getLast().price
                     ) {
                     order = ASCENDING_ORDER
                 }
