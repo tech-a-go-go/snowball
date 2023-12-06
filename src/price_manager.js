@@ -109,10 +109,11 @@ class PriceManager extends EventTarget {
                 let d = this.s1Ema9.getLast()
                 this.trendManager1.addPrices(d.ts * 1000, 
                 [
-                    // d.price,
-                    this.s1Ema125.getLast().price,
+                    d.price,
+                    // this.s1Ema125.getLast().price,
                     this.s1Ema150.getLast().price,
                     this.m1Ema9.getLast().price,
+                    this.m1Ema25.getLast().price,
                     this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
                     this.m1Ema75.getLast().price,
                     // this.h1Ema9.getLast().price,
@@ -121,8 +122,9 @@ class PriceManager extends EventTarget {
                     [
                         // d.price,
                         // this.s1Ema125.getLast().price,
-                        this.s1Ema150.getLast().price,
+                        // this.s1Ema150.getLast().price,
                         this.m1Ema9.getLast().price,
+                        this.m1Ema25.getLast().price,
                         this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
                         this.m1Ema75.getLast().price,
                         // this.h1Ema9.getLast().price,
