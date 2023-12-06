@@ -115,23 +115,33 @@ class PriceManager extends EventTarget {
                     this.m1Ema9.getLast().price,
                     this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
                     this.m1Ema75.getLast().price,
-                    this.h1Ema9.getLast().price,
+                    // this.h1Ema9.getLast().price,
                 ])
-                let order = UNORDERED
-                if (this.s1Ema125.getLast().price > this.s1Ema150.getLast().price
-                    && this.m1Ema9.getLast().price > this.m1Ema25.getLast().price
-                    && this.m1Ema45.getLast().price > this.m1Ema75.getLast().price
-                    && this.m1Ema9.getLast().price > this.h1Ema9.getLast().price
-                    ) {
-                    order = DESCENDING_ORDER
-                } else if (this.s1Ema125.getLast().price < this.s1Ema150.getLast().price
-                    && this.m1Ema9.getLast().price < this.m1Ema25.getLast().price
-                    && this.m1Ema45.getLast().price < this.m1Ema75.getLast().price
-                    && this.m1Ema9.getLast().price < this.h1Ema9.getLast().price
-                    ) {
-                    order = ASCENDING_ORDER
-                }
-                this.trendManager2.addPrices2(d.ts * 1000, order)
+                this.trendManager2.addPrices(d.ts * 1000, 
+                    [
+                        // d.price,
+                        // this.s1Ema125.getLast().price,
+                        this.s1Ema150.getLast().price,
+                        this.m1Ema9.getLast().price,
+                        this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
+                        this.m1Ema75.getLast().price,
+                        // this.h1Ema9.getLast().price,
+                    ])
+                // let order = UNORDERED
+                // if (this.s1Ema125.getLast().price > this.s1Ema150.getLast().price
+                //     && this.m1Ema9.getLast().price > this.m1Ema25.getLast().price
+                //     && this.m1Ema45.getLast().price > this.m1Ema75.getLast().price
+                //     && this.m1Ema9.getLast().price > this.h1Ema9.getLast().price
+                //     ) {
+                //     order = DESCENDING_ORDER
+                // } else if (this.s1Ema125.getLast().price < this.s1Ema150.getLast().price
+                //     && this.m1Ema9.getLast().price < this.m1Ema25.getLast().price
+                //     && this.m1Ema45.getLast().price < this.m1Ema75.getLast().price
+                //     && this.m1Ema9.getLast().price < this.h1Ema9.getLast().price
+                //     ) {
+                //     order = ASCENDING_ORDER
+                // }
+                // this.trendManager2.addPrices2(d.ts * 1000, order)
 
                 let trendA = this.trendManager1.getState();
                 let trendB = this.trendManager2.getState();
