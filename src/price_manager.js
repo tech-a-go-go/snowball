@@ -11,6 +11,7 @@ class PriceManager extends EventTarget {
 
         this.s1OhlcBuf = new OhlcBuffer("1s")
         this.s1Ema9 = new Ema(9)
+        this.s1Ema25 = new Ema(25)
         this.s1Ema125 = new Ema(125)
         this.s1Ema150 = new Ema(150)
     
@@ -68,6 +69,7 @@ class PriceManager extends EventTarget {
     clear() {
         this.s1OhlcBuf.clear()
         this.s1Ema9.clear()
+        this.s1Ema25.clear()
         this.s1Ema125.clear()
         this.s1Ema150.clear()
         this.m1OhlcBuf.clear()
@@ -88,6 +90,7 @@ class PriceManager extends EventTarget {
 
         const s1Result = this.s1OhlcBuf.addPrice(price, unixtime)
         this.s1Ema9.add(price, s1Result.normalizedTs)
+        this.s1Ema25.add(price, s1Result.normalizedTs)
         this.s1Ema125.add(price, s1Result.normalizedTs)
         this.s1Ema150.add(price, s1Result.normalizedTs)
 
