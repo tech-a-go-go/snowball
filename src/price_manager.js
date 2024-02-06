@@ -12,7 +12,7 @@ class PriceManager extends EventTarget {
         this.s1OhlcBuf = new OhlcBuffer("1s")
         this.s1Ema9 = new Ema(9)
         this.s1Ema25 = new Ema(25)
-        this.s1Ema125 = new Ema(125)
+        this.s1Ema75 = new Ema(75)
         this.s1Ema150 = new Ema(150)
     
         this.m1OhlcBuf = new OhlcBuffer("1m")
@@ -70,7 +70,7 @@ class PriceManager extends EventTarget {
         this.s1OhlcBuf.clear()
         this.s1Ema9.clear()
         this.s1Ema25.clear()
-        this.s1Ema125.clear()
+        this.s1Ema75.clear()
         this.s1Ema150.clear()
         this.m1OhlcBuf.clear()
         this.m1Ema9.clear()
@@ -91,7 +91,7 @@ class PriceManager extends EventTarget {
         const s1Result = this.s1OhlcBuf.addPrice(price, unixtime)
         this.s1Ema9.add(price, s1Result.normalizedTs)
         this.s1Ema25.add(price, s1Result.normalizedTs)
-        this.s1Ema125.add(price, s1Result.normalizedTs)
+        this.s1Ema75.add(price, s1Result.normalizedTs)
         this.s1Ema150.add(price, s1Result.normalizedTs)
 
         const m1Result = this.m1OhlcBuf.addPrice(price, unixtime)
@@ -113,7 +113,7 @@ class PriceManager extends EventTarget {
                 this.trendManager1.addPrices(d.ts * 1000, 
                 [
                     d.price,
-                    // this.s1Ema125.getLast().price,
+                    // this.s1Ema75.getLast().price,
                     this.s1Ema150.getLast().price,
                     this.m1Ema9.getLast().price,
                     this.m1Ema25.getLast().price,
@@ -124,7 +124,7 @@ class PriceManager extends EventTarget {
                 this.trendManager2.addPrices(d.ts * 1000, 
                     [
                         // d.price,
-                        // this.s1Ema125.getLast().price,
+                        // this.s1Ema75.getLast().price,
                         // this.s1Ema150.getLast().price,
                         this.m1Ema9.getLast().price,
                         this.m1Ema25.getLast().price,
@@ -133,13 +133,13 @@ class PriceManager extends EventTarget {
                         // this.h1Ema9.getLast().price,
                     ])
                 // let order = UNORDERED
-                // if (this.s1Ema125.getLast().price > this.s1Ema150.getLast().price
+                // if (this.s1Ema75.getLast().price > this.s1Ema150.getLast().price
                 //     && this.m1Ema9.getLast().price > this.m1Ema25.getLast().price
                 //     && this.m1Ema45.getLast().price > this.m1Ema75.getLast().price
                 //     && this.m1Ema9.getLast().price > this.h1Ema9.getLast().price
                 //     ) {
                 //     order = DESCENDING_ORDER
-                // } else if (this.s1Ema125.getLast().price < this.s1Ema150.getLast().price
+                // } else if (this.s1Ema75.getLast().price < this.s1Ema150.getLast().price
                 //     && this.m1Ema9.getLast().price < this.m1Ema25.getLast().price
                 //     && this.m1Ema45.getLast().price < this.m1Ema75.getLast().price
                 //     && this.m1Ema9.getLast().price < this.h1Ema9.getLast().price
