@@ -33,8 +33,6 @@ class PriceManager extends EventTarget {
 
         this.trendManager1 = new TrendManager()
         this.trendManager2 = new TrendManager()
-
-        this.trends = []
     }
 
     static getInstance() {
@@ -122,86 +120,24 @@ class PriceManager extends EventTarget {
                      this.s1Ema75.getLast().price,
                      this.s1Ema150.getLast().price,
                      this.m1Ema9.getLast().price,
-                     //this.m1Ema25.getLast().price,
-                     //this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
+                     this.m1Ema25.getLast().price,
+                     this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
                      this.m1Ema75.getLast().price,
-                     // this.h1Ema9.getLast().price,
+                     this.h1Ema9.getLast().price,
+                    //  this.h4Ema9.getLast().price,
                 ])
-                // this.trendManager2.addPrices(d.ts * 1000, 
-                //     [
-                //         // d.price,
-                //         // this.s1Ema75.getLast().price,
-                //         // this.s1Ema150.getLast().price,
-                //         this.m1Ema9.getLast().price,
-                //         this.m1Ema25.getLast().price,
-                //         this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
-                //         this.m1Ema75.getLast().price,
-                //         // this.h1Ema9.getLast().price,
-                //     ])
-                // let order = UNORDERED
-                // if (this.s1Ema75.getLast().price > this.s1Ema150.getLast().price
-                //     && this.m1Ema9.getLast().price > this.m1Ema25.getLast().price
-                //     && this.m1Ema45.getLast().price > this.m1Ema75.getLast().price
-                //     && this.m1Ema9.getLast().price > this.h1Ema9.getLast().price
-                //     ) {
-                //     order = DESCENDING_ORDER
-                // } else if (this.s1Ema75.getLast().price < this.s1Ema150.getLast().price
-                //     && this.m1Ema9.getLast().price < this.m1Ema25.getLast().price
-                //     && this.m1Ema45.getLast().price < this.m1Ema75.getLast().price
-                //     && this.m1Ema9.getLast().price < this.h1Ema9.getLast().price
-                //     ) {
-                //     order = ASCENDING_ORDER
-                // }
-                // this.trendManager2.addPrices2(d.ts * 1000, order)
+                this.trendManager2.addPrices(d.ts * 1000, 
+                    [
+                        this.m1Ema9.getLast().price,
+                        this.m1Ema25.getLast().price,
+                        this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
+                        this.m1Ema75.getLast().price,
+                    ])
 
-                let trendA = this.trendManager1.getState();
-                // let trendB = this.trendManager2.getState();
-
-                // let trend = NO_TREND_STATE;
-                // if (trendA === TREND_UP_STATE && trendB === TREND_UP_STATE) {
-                //     trend = TREND_UP_STATE;
-                // } else if (trendA === TREND_DOWN_STATE && trendB === TREND_DOWN_STATE) {
-                //     trend = TREND_DOWN_STATE;
-                // }
-
-                let trend = NO_TREND_STATE;
-                if (trendA === TREND_UP_STATE) {
-                    trend = TREND_UP_STATE;
-                } else if (trendA === TREND_DOWN_STATE) {
-                    trend = TREND_DOWN_STATE;
-                }
-                this.trends.push({timestamp:unixtime, price, trend})
             } 
         }
 
         return {"s1NewPeriod": s1Result.newPeriod, "m1NewPeriod": m1Result.newPeriod, "m5NewPeriod": m5Result.newPeriod, "h1NewPeriod": h1Result.newPeriod}
-    }
-
-
-    _storeForBulk(unixtime, price) {
-        this.rawData.push({timestamp: unixtime, price: price})
-
-        const s1Result = this.s1OhlcBuf.addPrice(price, unixtime)
-        this.s1Ema9.add(price, s1Result.normalizedTs)
-        this.s1Ema25.add(price, s1Result.normalizedTs)
-        this.s1Ema75.add(price, s1Result.normalizedTs)
-        this.s1Ema150.add(price, s1Result.normalizedTs)
-
-        const m1Result = this.m1OhlcBuf.addPrice(price, unixtime)
-        this.m1Ema9.add(price, m1Result.normalizedTs)
-        this.m1Ema25.add(price, m1Result.normalizedTs)
-        this.m1Ema45.add(price, m1Result.normalizedTs)
-        this.m1Ema75.add(price, m1Result.normalizedTs)
-        this.m1Ema250.add(price, m1Result.normalizedTs)
-
-        const m5Result = this.m5OhlcBuf.addPrice(price, unixtime)
-        this.m5Ema9.add(price, m5Result.normalizedTs)
-
-        const h1Result = this.h1OhlcBuf.addPrice(price, unixtime)
-        this.h1Ema9.add(price, h1Result.normalizedTs)
-
-        const h4Result = this.h4OhlcBuf.addPrice(price, unixtime)
-        this.h4Ema9.add(price, h4Result.normalizedTs)
     }
 
     _bulkStoreH1Ema9(data) {
@@ -242,7 +178,7 @@ class PriceManager extends EventTarget {
         this._bulkStoreH1Ema9(data)
         this._bulkStoreH4Ema9(data)
         data.forEach((d) => {
-            this._storeForBulk(d.ts, d.price)
+            this.store(d.ts, d.price)
         })
     }
 
