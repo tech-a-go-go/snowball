@@ -28,6 +28,9 @@ class PriceManager extends EventTarget {
         this.h1OhlcBuf = new OhlcBuffer("1h")
         this.h1Ema9 = new Ema(9)
 
+        this.h4OhlcBuf = new OhlcBuffer("4h")
+        this.h4Ema9 = new Ema(9)
+
         this.trendManager1 = new TrendManager()
         this.trendManager2 = new TrendManager()
 
@@ -107,6 +110,9 @@ class PriceManager extends EventTarget {
         const h1Result = this.h1OhlcBuf.addPrice(price, unixtime)
         this.h1Ema9.add(price, h1Result.normalizedTs)
 
+        const h4Result = this.h4OhlcBuf.addPrice(price, unixtime)
+        this.h4Ema9.add(price, h4Result.normalizedTs)
+
         if (s1Result.newPeriod) {
             if (this.s1Ema9.count() > 0 && this.m1Ema9.count() > 0) {
                 let d = this.s1Ema9.getLast()
@@ -171,10 +177,72 @@ class PriceManager extends EventTarget {
         return {"s1NewPeriod": s1Result.newPeriod, "m1NewPeriod": m1Result.newPeriod, "m5NewPeriod": m5Result.newPeriod, "h1NewPeriod": h1Result.newPeriod}
     }
 
+
+    _storeForBulk(unixtime, price) {
+        this.rawData.push({timestamp: unixtime, price: price})
+
+        const s1Result = this.s1OhlcBuf.addPrice(price, unixtime)
+        this.s1Ema9.add(price, s1Result.normalizedTs)
+        this.s1Ema25.add(price, s1Result.normalizedTs)
+        this.s1Ema75.add(price, s1Result.normalizedTs)
+        this.s1Ema150.add(price, s1Result.normalizedTs)
+
+        const m1Result = this.m1OhlcBuf.addPrice(price, unixtime)
+        this.m1Ema9.add(price, m1Result.normalizedTs)
+        this.m1Ema25.add(price, m1Result.normalizedTs)
+        this.m1Ema45.add(price, m1Result.normalizedTs)
+        this.m1Ema75.add(price, m1Result.normalizedTs)
+        this.m1Ema250.add(price, m1Result.normalizedTs)
+
+        const m5Result = this.m5OhlcBuf.addPrice(price, unixtime)
+        this.m5Ema9.add(price, m5Result.normalizedTs)
+
+        const h1Result = this.h1OhlcBuf.addPrice(price, unixtime)
+        this.h1Ema9.add(price, h1Result.normalizedTs)
+
+        const h4Result = this.h4OhlcBuf.addPrice(price, unixtime)
+        this.h4Ema9.add(price, h4Result.normalizedTs)
+    }
+
+    _bulkStoreH1Ema9(data) {
+        const index = data.findIndex(item => Number.isFinite(item.h1Ema9));
+        const firstData =data[index]
+        // 元データが微妙にズレていることがあるので1時間区切りの時間に丸める
+        const unixtime = this._roundToNearestHour(firstData.ts, 1)
+        const h1Result = this.h1OhlcBuf.addPrice(firstData.h1Ema9, unixtime)
+        this.h1Ema9.lastNormalizedTs = h1Result.normalizedTs
+        this.h1Ema9.values = new Array(9).fill({ts:0, price:0})
+        this.h1Ema9.averages.push({"ts": h1Result.normalizedTs, "price": firstData.h1Ema9})
+    }
+
+    _bulkStoreH4Ema9(data) {
+        const index = data.findIndex(item => Number.isFinite(item.h4Ema9));
+        const firstData =data[index]
+        // 元データが微妙にズレていることがあるので4時間区切りの時間に丸める
+        const unixtime = this._roundToNearestHour(firstData.ts, 4)
+        const h4Result = this.h4OhlcBuf.addPrice(firstData.h4Ema9, unixtime)
+        this.h4Ema9.lastNormalizedTs = h4Result.normalizedTs
+        this.h4Ema9.values = new Array(9).fill({ts:0, price:0})
+        this.h4Ema9.averages.push({"ts": h4Result.normalizedTs, "price": firstData.h4Ema9})
+    }
+
+    // Unixタイムスタンプを最も近い指定された時間区切りに丸める
+    _roundToNearestHour(unixtime, hour) {
+        const date = new Date(unixtime * 1000);
+        const roundedDate = new Date(date.setHours(date.getHours() + Math.round(date.getMinutes()/60)));
+        roundedDate.setMinutes(0);
+        roundedDate.setSeconds(0);
+        roundedDate.setMilliseconds(0);
+        roundedDate.setHours(roundedDate.getHours() - (roundedDate.getHours() % hour));
+        return Math.floor(roundedDate.getTime() / 1000);
+    }
+
     bulkStore(data) {
         this.clear()
+        this._bulkStoreH1Ema9(data)
+        this._bulkStoreH4Ema9(data)
         data.forEach((d) => {
-            this.store(d.ts, d.price)
+            this._storeForBulk(d.ts, d.price)
         })
     }
 

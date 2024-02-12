@@ -31,6 +31,11 @@ class Ema {
      * @param {int} normalizedTs 
      */
      add(price, normalizedTs) {
+
+        // 一度追加したデータより古いデータは無視
+        if (normalizedTs < this.lastNormalizedTs){
+            return
+        }
         
         if (this.lastNormalizedTs == 0) {
             // 最初のデータの処理
