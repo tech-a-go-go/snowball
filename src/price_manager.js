@@ -123,17 +123,14 @@ class PriceManager extends EventTarget {
                      this.m1Ema25.getLast().price,
                      this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
                      this.m1Ema75.getLast().price,
-                     this.h1Ema9.getLast().price,
+                     this.m1Ema250.getLast().price,
+                    //  this.h1Ema9.getLast().price,
                     //  this.h4Ema9.getLast().price,
                 ])
-                this.trendManager2.addPrices(d.ts * 1000, 
-                    [
-                        this.m1Ema9.getLast().price,
-                        this.m1Ema25.getLast().price,
-                        this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
-                        this.m1Ema75.getLast().price,
-                    ])
-
+                this.trendManager2.addPricesByConditions(d.ts * 1000, 
+                    (this.m1Ema9.getLast().price > this.m1Ema25.getLast().price) && (this.m1Ema45.getLast().price > this.m1Ema75.getLast().price) && (this.m1Ema75.getLast().price > this.m1Ema250.getLast().price),
+                    (this.m1Ema9.getLast().price > this.m1Ema25.getLast().price) && (this.m1Ema45.getLast().price > this.m1Ema75.getLast().price) && (this.m1Ema75.getLast().price > this.m1Ema250.getLast().price)
+                );
             } 
         }
 

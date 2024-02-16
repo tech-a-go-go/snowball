@@ -90,7 +90,39 @@ class TrendManager {
         }
     }
 
-    addPrices2(time, order) {
+    addPricesByOrder(time, order) {
+        if (order === ASCENDING_ORDER) {
+            if (this.currentState !== TREND_DOWN_STATE) {
+                if(this.currentState === TREND_UP_STATE){
+                    this.trendUpTimeRanges.push(new TimeRange(this.beginTime, time))
+                }
+                this.currentState = TREND_DOWN_STATE
+                this.beginTime = time
+            }
+        } else if (order === DESCENDING_ORDER) {
+            if (this.currentState !== TREND_UP_STATE) {
+                if(this.currentState === TREND_DOWN_STATE){
+                    this.trendDownTimeRanges.push(new TimeRange(this.beginTime, time))
+                }
+                this.currentState = TREND_UP_STATE
+                this.beginTime = time
+            }
+        } else {
+            if (this.currentState === TREND_UP_STATE) {
+                this.currentState = NO_TREND_STATE
+                this.trendUpTimeRanges.push(new TimeRange(this.beginTime, time))
+                this.beginTime = null
+            } else if (this.currentState === TREND_DOWN_STATE) {
+                this.currentState = NO_TREND_STATE
+                this.trendDownTimeRanges.push(new TimeRange(this.beginTime, time))
+                this.beginTime = null
+            }
+        }
+    }
+
+    addPricesByConditions(time, ascending_condition, descending_condition) {
+        order = ascending_condition ? ASCENDING_ORDER : descending_condition ? DESCENDING_ORDER : UNORDERED
+        
         if (order === ASCENDING_ORDER) {
             if (this.currentState !== TREND_DOWN_STATE) {
                 if(this.currentState === TREND_UP_STATE){
