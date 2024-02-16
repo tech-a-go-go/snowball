@@ -121,8 +121,8 @@ class TrendManager {
     }
 
     addPricesByConditions(time, ascending_condition, descending_condition) {
-        order = ascending_condition ? ASCENDING_ORDER : descending_condition ? DESCENDING_ORDER : UNORDERED
-        
+        const order = ascending_condition ? ASCENDING_ORDER : descending_condition ? DESCENDING_ORDER : UNORDERED
+
         if (order === ASCENDING_ORDER) {
             if (this.currentState !== TREND_DOWN_STATE) {
                 if(this.currentState === TREND_UP_STATE){
