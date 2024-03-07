@@ -114,22 +114,33 @@ class PriceManager extends EventTarget {
         if (s1Result.newPeriod) {
             if (this.s1Ema9.count() > 0 && this.m1Ema9.count() > 0) {
                 let d = this.s1Ema9.getLast()
-                this.trendManager1.addPrices(d.ts * 1000, 
-                [
-                     //d.price,
-                     this.s1Ema75.getLast().price,
-                     this.s1Ema150.getLast().price,
-                     this.m1Ema9.getLast().price,
-                     this.m1Ema25.getLast().price,
-                     this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
-                     this.m1Ema75.getLast().price,
-                     this.m1Ema250.getLast().price,
-                    //  this.h1Ema9.getLast().price,
-                    //  this.h4Ema9.getLast().price,
-                ])
+                let s1Ema75 = this.s1Ema75.getLast().price
+                let s1Ema150 = this.s1Ema150.getLast().price
+                let m1Ema9 = this.m1Ema9.getLast().price
+                let m1Ema25 = this.m1Ema25.getLast().price
+                let m1Ema45 = this.m1Ema45.getLast().price
+                let m1Ema75 = this.m1Ema75.getLast().price
+                // let m1Ema250 = this.m1Ema250.getLast().price
+                // this.trendManager1.addPrices(d.ts * 1000, 
+                // [
+                //      //d.price,
+                //      this.s1Ema75.getLast().price,
+                //      this.s1Ema150.getLast().price,
+                //      this.m1Ema9.getLast().price,
+                //      this.m1Ema25.getLast().price,
+                //      this.m1Ema45.getLast().price, // m5Ema9とほぼ同じ
+                //      this.m1Ema75.getLast().price,
+                //      this.m1Ema250.getLast().price,
+                //     //  this.h1Ema9.getLast().price,
+                //     //  this.h4Ema9.getLast().price,
+                // ])
+                this.trendManager1.addPricesByConditions(d.ts * 1000, 
+                    (s1Ema75 > s1Ema150) && (m1Ema9 > m1Ema25) && (m1Ema45 > m1Ema75),
+                    (s1Ema75 < s1Ema150) && (m1Ema9 < m1Ema25) && (m1Ema45 < m1Ema75)
+                );
                 this.trendManager2.addPricesByConditions(d.ts * 1000, 
-                    (this.m1Ema9.getLast().price > this.m1Ema25.getLast().price) && (this.m1Ema45.getLast().price > this.m1Ema75.getLast().price),
-                    (this.m1Ema9.getLast().price < this.m1Ema25.getLast().price) && (this.m1Ema45.getLast().price < this.m1Ema75.getLast().price)
+                    (m1Ema9 > m1Ema25) && (m1Ema45 > m1Ema75),
+                    (m1Ema9 < m1Ema25) && (m1Ema45 < m1Ema75)
                 );
             } 
         }
