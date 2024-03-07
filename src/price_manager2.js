@@ -12,7 +12,7 @@ class PriceManager2 extends EventTarget {
         this.s1OhlcBuf = new OhlcBuffer("1s")
     
         this.m1OhlcBuf = new OhlcBuffer("1m")
-        this.m1Ema20 = new Ema(25)
+        this.m1Ema20 = new Ema(20)
         this.m1Ema75 = new Ema(75)
         this.m1Ema200 = new Ema(200)
 
@@ -60,8 +60,8 @@ class PriceManager2 extends EventTarget {
         this.m1Ema75.add(price, m1Result.normalizedTs)
         this.m1Ema200.add(price, m1Result.normalizedTs)
 
-        if (s1Result.newPeriod) {
-            if (this.s1Ema9.count() > 0 && this.m1Ema9.count() > 0) {
+        if (m1Result.newPeriod) {
+            if (this.m1Ema20.count() > 0) {
                 let d = this.s1OhlcBuf.getLast()
                 let m1Ema20 = this.m1Ema20.getLast().price
                 let m1Ema75 = this.m1Ema75.getLast().price
@@ -77,7 +77,6 @@ class PriceManager2 extends EventTarget {
     }
 
     bulkStore(data) {
-        this.clear()
         data.forEach((d) => {
             this.store(d.ts, d.price)
         })
