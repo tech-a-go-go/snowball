@@ -21,7 +21,7 @@ class PriceManager2 extends EventTarget {
 
     static getInstance() {
         if (!window.priceManager) {
-            window.priceManager = new PriceManager()
+            window.priceManager = new PriceManager2()
             window.priceManager.subscribeStreaming()
         }
         return window.priceManager
