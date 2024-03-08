@@ -10,7 +10,9 @@ class PriceManager2 extends EventTarget {
         this.rawData = []
 
         this.s1OhlcBuf = new OhlcBuffer("1s")
-    
+        this.s1Ema75 = new Ema(75)
+        this.s1Ema200 = new Ema(200)
+
         this.m1OhlcBuf = new OhlcBuffer("1m")
         this.m1Ema20 = new Ema(20)
         this.m1Ema75 = new Ema(75)
@@ -55,11 +57,15 @@ class PriceManager2 extends EventTarget {
         this.rawData.push({timestamp: unixtime, price: price})
 
         const s1Result = this.s1OhlcBuf.addPrice(price, unixtime)
+        this.s1Ema75.add(price, s1Result.normalizedTs)
+        this.s1Ema200.add(price, s1Result.normalizedTs)
+
         const m1Result = this.m1OhlcBuf.addPrice(price, unixtime)
         this.m1Ema20.add(price, m1Result.normalizedTs)
         this.m1Ema75.add(price, m1Result.normalizedTs)
         this.m1Ema200.add(price, m1Result.normalizedTs)
 
+        // every minute, not second
         if (m1Result.newPeriod) {
             if (this.m1Ema20.count() > 0) {
                 let d = this.s1OhlcBuf.getLast()
