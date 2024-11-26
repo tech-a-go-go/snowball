@@ -9,7 +9,7 @@ class PriceManager2 extends EventTarget {
     this.rawData = [];
 
     this.s1OhlcBuf = new OhlcBuffer("1s");
-    this.s1Ema25 = new Ema(25);
+    this.s1Ema20 = new Ema(20);
     this.s1Ema75 = new Ema(75);
 
     this.m1OhlcBuf = new OhlcBuffer("1m");
