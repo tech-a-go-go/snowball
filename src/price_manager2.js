@@ -57,7 +57,7 @@ class PriceManager2 extends EventTarget {
     this.rawData.push({ timestamp: unixtime, price: price });
 
     const s1Result = this.s1OhlcBuf.addPrice(price, unixtime);
-    this.s1Ema25.add(price, s1Result.normalizedTs);
+    this.s1Ema20.add(price, s1Result.normalizedTs);
     this.s1Ema75.add(price, s1Result.normalizedTs);
 
     const m1Result = this.m1OhlcBuf.addPrice(price, unixtime);
