@@ -11,7 +11,7 @@ class PriceManager2 extends EventTarget {
     this.s1OhlcBuf = new OhlcBuffer("1s");
     this.s1Ema20 = new Ema(20);
     this.s1Ema75 = new Ema(75);
-    this.s1Ema540 = new Ema(540); // m1Ema9と同じ (線がなめらかになるようにs1を利用)
+    this.s1Ema200 = new Ema(200);
 
     this.m1OhlcBuf = new OhlcBuffer("1m");
     this.m1Ema9 = new Ema(9);
@@ -60,7 +60,7 @@ class PriceManager2 extends EventTarget {
     const s1Result = this.s1OhlcBuf.addPrice(price, unixtime);
     this.s1Ema20.add(price, s1Result.normalizedTs);
     this.s1Ema75.add(price, s1Result.normalizedTs);
-    this.s1Ema540.add(price, s1Result.normalizedTs);
+    this.s1Ema200.add(price, s1Result.normalizedTs);
 
     const m1Result = this.m1OhlcBuf.addPrice(price, unixtime);
     this.m1Ema9.add(price, m1Result.normalizedTs);
