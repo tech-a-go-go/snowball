@@ -9,6 +9,7 @@ class PriceManager2 extends EventTarget {
     this.rawData = [];
 
     this.s1OhlcBuf = new OhlcBuffer("1s");
+    this.s1Ema9 = new Ema(9);
     this.s1Ema20 = new Ema(20);
     this.s1Ema75 = new Ema(75);
     this.s1Ema200 = new Ema(200);
@@ -41,7 +42,9 @@ class PriceManager2 extends EventTarget {
     let result = this.store(timestamp, price);
 
     this.dispatchEvent(
-      new CustomEvent("priceData", { detail: { timestamp, price } })
+      new CustomEvent("priceData", {
+        detail: { timestamp, price, buyPrice, sellPrice },
+      })
     );
 
     if (result.s1NewPeriod) {
@@ -58,6 +61,7 @@ class PriceManager2 extends EventTarget {
     this.rawData.push({ timestamp: unixtime, price: price });
 
     const s1Result = this.s1OhlcBuf.addPrice(price, unixtime);
+    this.s1Ema9.add(price, s1Result.normalizedTs);
     this.s1Ema20.add(price, s1Result.normalizedTs);
     this.s1Ema75.add(price, s1Result.normalizedTs);
     this.s1Ema200.add(price, s1Result.normalizedTs);
