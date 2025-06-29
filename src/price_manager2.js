@@ -34,16 +34,17 @@ class PriceManager2 extends EventTarget {
   }
 
   onPriceReceive(priceData) {
-    let buyPrice = parseInt(priceData[3][0] * 1000, 10);
-    let sellPrice = parseInt(priceData[2][0] * 1000, 10);
-    let price = (buyPrice + sellPrice) / 2 / 1000;
+    let sellPrice = parseFloat(priceData[2][0]); // bid価格
+    let buyPrice = parseFloat(priceData[3][0]);  // ask価格
+    let price = (buyPrice + sellPrice) / 2;
     let date = new Date(priceData[1]);
-    let timestamp = Math.floor(date.getTime() / 1000);
+    let realTimestamp = date.getTime();
+    let timestamp = Math.floor(realTimestamp / 1000);
     let result = this.store(timestamp, price);
 
     this.dispatchEvent(
       new CustomEvent("priceData", {
-        detail: { timestamp, price, buyPrice, sellPrice },
+        detail: { timestamp, realTimestamp, price, buyPrice, sellPrice },
       })
     );
 
