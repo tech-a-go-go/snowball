@@ -9,11 +9,13 @@ class ImpulseDetector {
         this.baseSlopeMin = 0.0004;
         this.kSlope = 1.2;
         this.kEmaBuf = 0.8;
+        this.upImpulseTimes = [];
+        this.downImpulseTimes = [];
     }
     get diffAlpha() {
         return 1 / this.atrPeriod;
     }
-    addTick(tickPrice, s1Ema9, s1Ema20) {
+    addTick(tickPrice, s1Ema9, s1Ema20, timestamp) {
         const flags = { isUptrend: false, isDowntrend: false };
         this.priceHistory.push(tickPrice);
         if (this.priceHistory.length > this.lookback) {
@@ -41,6 +43,8 @@ class ImpulseDetector {
         const downPulse = this.prevDownCond && !downCond;
         flags.isUptrend = upPulse;
         flags.isDowntrend = downPulse;
+        if (upPulse && timestamp !== undefined) this.upImpulseTimes.push(timestamp);
+        if (downPulse && timestamp !== undefined) this.downImpulseTimes.push(timestamp);
         this.prevUpCond = upCond;
         this.prevDownCond = downCond;
         return flags;
@@ -67,5 +71,7 @@ class ImpulseDetector {
         this.diffRma = 0;
         this.prevUpCond = false;
         this.prevDownCond = false;
+        this.upImpulseTimes = [];
+        this.downImpulseTimes = [];
     }
 }

@@ -57,7 +57,7 @@ class PriceManager extends EventTarget {
     const m1Ema75 = this.m1Ema75.getLast().price;
     const m1Ema200 = this.m1Ema200.getLast().price;
     
-    const {isUptrend, isDowntrend} = this.impulseDetector.addTick(price, s1Ema9, s1Ema20);
+    const {isUptrend, isDowntrend} = this.impulseDetector.addTick(price, s1Ema9, s1Ema20, timestamp);
 
     this.dispatchEvent(
       new CustomEvent("tick", {
