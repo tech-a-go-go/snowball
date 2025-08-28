@@ -1,8 +1,6 @@
 class ImpulseDetector {
     constructor() {
         this.priceHistory = [];
-        this.ema9History = [];
-        this.ema20History = [];
         this.lookback = 20;
         this.diffRma = 0;
         this.atrPeriod = 14;
@@ -15,21 +13,17 @@ class ImpulseDetector {
     get diffAlpha() {
         return 1 / this.atrPeriod;
     }
-    addTick(tick) {
+    addTick(tickPrice, s1Ema9, s1Ema20) {
         const flags = { isUptrend: false, isDowntrend: false };
-        this.priceHistory.push(tick.price);
-        this.ema9History.push(tick.s1Ema9);
-        this.ema20History.push(tick.s1Ema20);
+        this.priceHistory.push(tickPrice);
         if (this.priceHistory.length > this.lookback) {
             this.priceHistory.shift();
-            this.ema9History.shift();
-            this.ema20History.shift();
         }
         if (this.priceHistory.length < 5)
             return flags;
-        const p = tick.price;
-        const e9 = tick.s1Ema9;
-        const e20 = tick.s1Ema20;
+        const p = tickPrice;
+        const e9 = s1Ema9;
+        const e20 = s1Ema20;
         const prev = this.priceHistory[this.priceHistory.length - 2];
         const absDiff = Math.abs(p - prev);
         this.diffRma = this.diffRma === 0
@@ -70,8 +64,6 @@ class ImpulseDetector {
     }
     reset() {
         this.priceHistory = [];
-        this.ema9History = [];
-        this.ema20History = [];
         this.diffRma = 0;
         this.prevUpCond = false;
         this.prevDownCond = false;
