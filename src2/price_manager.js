@@ -57,7 +57,7 @@ class PriceManager extends EventTarget {
     const m1Ema75 = this.m1Ema75.getLast().price;
     const m1Ema200 = this.m1Ema200.getLast().price;
     
-    const {s1UpPulse, s1DownPulse} = this.impulseDetector.addTick(price, s1Ema9, s1Ema20);
+    const {isUptrend, isDowntrend} = this.impulseDetector.addTick(price, s1Ema9, s1Ema20);
 
     this.dispatchEvent(
       new CustomEvent("tick", {
@@ -68,7 +68,7 @@ class PriceManager extends EventTarget {
           s1NewPeriod, m1NewPeriod,
           s1Ema9, s1Ema20, s1Ema75, s1Ema200, m1Ema9, m1Ema20, m1Ema75, m1Ema200,
           // impulse detector
-          s1UpPulse, s1DownPulse,
+          isImpulseUp : isUptrend, isImpulseDown : isDowntrend,
           // zigzag
           zigzag1,
           zigzag2,
