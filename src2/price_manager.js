@@ -20,7 +20,7 @@ class PriceManager extends EventTarget {
     this.m1Ema75 = new Ema(75);
     this.m1Ema200 = new Ema(200);
 
-    this.zigzag1 = new ZigZag(0.02, 2);
+    this.zigzag1 = new ZigZag(0.008, 2);
     this.zigzag2 = new ZigZag(0.05, 2);
     this.impulseDetector = new ImpulseDetector();
 
