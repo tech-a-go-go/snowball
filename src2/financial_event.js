@@ -75,8 +75,7 @@ class FinancialEvent {
   
     // ===== private: fetch & DOM =====
     async #loadDocument(url) {
-      const res = await fetch(url, { credentials: "include" });
-      const html = await res.text();
+      const html = await this._fetchHtml(url);
       const parser = new DOMParser();
       return parser.parseFromString(html, "text/html");
     }
