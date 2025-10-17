@@ -37,11 +37,12 @@ class ZigZag {
         }
         lastPivot.end = tick;
     }
-    _addPivot(newPivot) {
+    _addPivot(newPivot, finalizedTime) {
         let finalizedPivot = null;
         const last = this._lastPivot();
         if (last) {
             last.isFinalized = true;
+            last.finalizedTime = finalizedTime; // 確定した時刻を保存
             finalizedPivot = last;
         }
         this.pivots.push(newPivot);
@@ -130,7 +131,7 @@ class ZigZag {
                         end: tick,
                         isFinalized: false
                     };
-                    const result = this._addPivot(newPivot);
+                    const result = this._addPivot(newPivot, tick.time); // 確定時刻を渡す
                     return {
                         finalizedPivot: result.finalizedPivot,
                         newPivot
@@ -145,7 +146,7 @@ class ZigZag {
                 end: tick,
                 isFinalized: false
             };
-            const result = this._addPivot(firstPivot);
+            const result = this._addPivot(firstPivot, null); // 最初のpivotは確定時刻なし
             return {
                 finalizedPivot: result.finalizedPivot,
                 newPivot: firstPivot
