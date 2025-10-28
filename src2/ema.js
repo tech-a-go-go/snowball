@@ -22,6 +22,8 @@ class Ema {
         this.size = size
         // 正規化された時刻(ローソク足の最初の時刻)
         this.lastNormalizedTs = 0
+        // タイムスタンプからインデックスへのマップ（高速アクセス用）
+        this._tsToIndexMap = new Map()
     }
 
     /**
@@ -41,6 +43,7 @@ class Ema {
             // 最初のデータの処理
             this.values.push({"price": price, "ts": normalizedTs})
             this.averages.push({"price": price, "ts": normalizedTs})
+            this._tsToIndexMap.set(normalizedTs, 0)
         } else {
             // 二個目以降のデータの処理
             let lastValue = this.values[this.values.length-1]
@@ -58,6 +61,7 @@ class Ema {
             } else {
                 // 新規時刻の価格データの追加処理
                 this.values.push({"price": price, "ts": normalizedTs})
+                const newIndex = this.averages.length
                 if (this.values.length <= this.size) {
                     // 生データの個数がsizeに達していない場合は単純移動平均
                     this.averages.push({"price": this._getAverages(this.values), "ts": normalizedTs})
@@ -68,6 +72,7 @@ class Ema {
                     // ダミーとして入れたpriceデータを更新
                     this.averages[this.averages.length-1].price = this._getExpoAverages(this.averages, price, this.size)
                 }
+                this._tsToIndexMap.set(normalizedTs, newIndex)
             }
         }
         this.lastNormalizedTs = normalizedTs
@@ -113,6 +118,16 @@ class Ema {
     }
 
     /**
+     * 指定されたタイムスタンプのEMA値を取得（O(1)）
+     * @param {int} ts タイムスタンプ
+     * @returns {number|undefined} EMA価格、存在しない場合はundefined
+     */
+    getValue(ts) {
+        const index = this._tsToIndexMap.get(ts)
+        return index !== undefined ? this.averages[index].price : undefined
+    }
+
+    /**
      * Key=時刻、Value=移動平均価格のdictを返す
      * @returns dict
      */
@@ -129,6 +144,7 @@ class Ema {
         this.values = [];
         this.averages = [];
         this.lastNormalizedTs = 0
+        this._tsToIndexMap.clear()
     }
 
     findRev(func) {
