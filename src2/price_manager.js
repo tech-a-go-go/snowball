@@ -21,9 +21,6 @@ class PriceManager extends EventTarget {
     this.m1Ema200 = new Ema(200);
 
     this.zigzag1 = new ZigZag(0.008, 2);
-    this.zigzag2 = new ZigZag(0.05, 2);
-    this.impulseDetector = new ImpulseDetector();
-
   }
 
   static getInstance() {
@@ -46,7 +43,7 @@ class PriceManager extends EventTarget {
     const realTimestamp = date.getTime();
     // 秒
     const timestamp = Math.floor(realTimestamp / 1000);
-    const {s1NewPeriod, m1NewPeriod, zigzag1, zigzag2} = this.store(timestamp, price);
+    const {s1NewPeriod, m1NewPeriod, zigzag1} = this.store(timestamp, price);
 
     const s1Ema9 = this.s1Ema9.getLast().price;
     const s1Ema20 = this.s1Ema20.getLast().price;
@@ -57,8 +54,6 @@ class PriceManager extends EventTarget {
     const m1Ema75 = this.m1Ema75.getLast().price;
     const m1Ema200 = this.m1Ema200.getLast().price;
     
-    const {isUptrend, isDowntrend} = this.impulseDetector.addTick(price, s1Ema9, s1Ema20, timestamp);
-
     this.dispatchEvent(
       new CustomEvent("tick", {
         detail: {
@@ -67,11 +62,8 @@ class PriceManager extends EventTarget {
           // ema
           s1NewPeriod, m1NewPeriod,
           s1Ema9, s1Ema20, s1Ema75, s1Ema200, m1Ema9, m1Ema20, m1Ema75, m1Ema200,
-          // impulse detector
-          isImpulseUp : isUptrend, isImpulseDown : isDowntrend,
           // zigzag
           zigzag1,
-          zigzag2,
         },
       })
     );
@@ -93,9 +85,8 @@ class PriceManager extends EventTarget {
     this.m1Ema200.add(price, m1Result.normalizedTs);
 
     const zigzag1Result = this.zigzag1.update({ time: unixtime, price });
-    const zigzag2Result = this.zigzag2.update({ time: unixtime, price });
 
-    return { s1NewPeriod: s1Result.newPeriod, m1NewPeriod: m1Result.newPeriod, zigzag1:zigzag1Result, zigzag2:zigzag2Result};
+    return { s1NewPeriod: s1Result.newPeriod, m1NewPeriod: m1Result.newPeriod, zigzag1:zigzag1Result};
   }
 
   bulkStore(data) {
