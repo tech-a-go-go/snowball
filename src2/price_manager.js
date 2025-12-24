@@ -25,6 +25,11 @@ class PriceManager extends EventTarget {
     this.m1Ema75 = new Ema(75);
     this.m1Ema200 = new Ema(200);
 
+    this.h1OhlcBuf = new OhlcBuffer("1h");
+    this.h1Ema9 = new Ema(9);
+    // h1Emaの秒足近似版（毎秒更新、途切れ防止用）
+    this.s1Ema32400 = new Ema(32400); // 9時間 = 9 * 60 * 60 = 32400秒
+
     this.zigzag1 = new ZigZag(0.008, 2);
   }
 
@@ -87,12 +92,17 @@ class PriceManager extends EventTarget {
     this.s1Ema1200.add(price, s1Result.normalizedTs);
     this.s1Ema4500.add(price, s1Result.normalizedTs);
     this.s1Ema12000.add(price, s1Result.normalizedTs);
+    // h1Ema近似値も秒ごとに更新
+    this.s1Ema32400.add(price, s1Result.normalizedTs);
 
     const m1Result = this.m1OhlcBuf.addPrice(price, unixtime);
     this.m1Ema9.add(price, m1Result.normalizedTs);
     this.m1Ema20.add(price, m1Result.normalizedTs);
     this.m1Ema75.add(price, m1Result.normalizedTs);
     this.m1Ema200.add(price, m1Result.normalizedTs);
+
+    const h1Result = this.h1OhlcBuf.addPrice(price, unixtime);
+    this.h1Ema9.add(price, h1Result.normalizedTs);
 
     const zigzag1Result = this.zigzag1.update({ time: unixtime, price });
 
